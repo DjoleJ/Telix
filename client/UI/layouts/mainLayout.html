@@ -1,0 +1,10 @@
+<template name="mainLayout">
+    <div id="page-top">
+        <div id="wrapper">
+            {{>navHeader}}
+            <div id="content-wrapper" class="d-flex flex-column">
+                {{>Template.dynamic template=content}}
+            </div>
+        </div>
+    </div>
+</template>

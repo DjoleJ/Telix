@@ -1,0 +1,44 @@
+<template name="izvestaji">
+    {{#if isEqual currentUser.username 'admin'}}
+
+    <div class="izvestaji-filter-row">
+        <div class="izvestaji-filter-item">
+            <input type="text" name="izvestajiFrom" class="form-control" id="izvestajiFrom" placeholder="Od datum">
+        </div>
+        <div class="izvestaji-filter-item">
+            <input type="text" name="izvestajiTo" class="form-control" id="izvestajiTo" placeholder="Do datum">
+        </div>
+    </div>
+
+    <div class="izvestaji-per-section-row">
+        <div class="izvestaji-per-section-item">
+            <span class="izvestaji-section-name">Servisi:</span>
+            <span class="izvestaji-section-amount">{{formatPrice getServicesProfit}} RSD</span>
+        </div>
+        <div class="izvestaji-per-section-item">
+            <span class="izvestaji-section-name">Telefoni:</span>
+            <span class="izvestaji-section-amount">{{formatPrice getPhonesProfit}} RSD</span>
+        </div>
+        <div class="izvestaji-per-section-item">
+            <span class="izvestaji-section-name">Artikli:</span>
+            <span class="izvestaji-section-amount">{{formatPrice getArticleSalesProfit}} RSD</span>
+        </div>
+        <div class="izvestaji-per-section-item">
+            <span class="izvestaji-section-name">Artikli 2:</span>
+            <span class="izvestaji-section-amount">{{formatPrice getArticleSalesTwoProfit}} RSD</span>
+        </div>
+        <div class="izvestaji-per-section-item">
+            <span class="izvestaji-section-name">Delovi:</span>
+            <span class="izvestaji-section-amount">{{formatPrice getPartSalesProfit}} RSD</span>
+        </div>
+    </div>
+
+    <div class="izvestaji-in-total-row">
+        <div class="izvestaji-in-total-item">
+            <span class="izvestaji-total-name">UKUPNO:</span>
+            <span class="izvestaji-total-amount">{{formatPrice getTotalProfit}} RSD</span>
+        </div>
+    </div>
+
+    {{/if}}
+</template>

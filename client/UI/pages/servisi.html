@@ -1,0 +1,596 @@
+<template name="servisi">
+    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+
+    <div class="modal modal-dark fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Dodaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdd">
+                        <div class="form-group">
+                            <label for="status">Komitent</label>
+                            <select class="form-control" id="komitent">
+                                <option value="0">Izaberi komitenta</option>
+                                {{#each getClients}}
+                                <option value="{{_id}}">
+                                    {{imeIPrezime}} {{#if hasContact kontaktTelefon}}&lt;{{kontaktTelefon}}&gt;{{/if}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imeIPrezime">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezime">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefon">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefon">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjaja">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjaja">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBroj">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBroj">
+                        </div>
+                        <div class="form-group">
+                            <label for="opisPosla">Opis posla</label>
+                            <textarea class="form-control" id="opisPosla"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="ocekivanaCena">Očekivana cena</label>
+                            <input type="text" class="form-control" id="ocekivanaCena">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalFilter" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filtriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFilter">
+                        <div class="form-group">
+                            <label>Status</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusSve" value="sve" {{ifFilterChecked 'sve'}}>
+                                <label class="form-check-label" for="filterStatusSve">Sve</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusPrimljeno" value="primljeno" {{ifFilterChecked 'primljeno'}}>
+                                <label class="form-check-label" for="filterStatusPrimljeno">Primljeno</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusServisirano" value="servisirano" {{ifFilterChecked 'servisirano'}}>
+                                <label class="form-check-label" for="filterStatusServisirano">Servisirano</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusNaplaceno" value="naplaceno" {{ifFilterChecked 'naplaceno'}}>
+                                <label class="form-check-label" for="filterStatusNaplaceno">Naplaćeno</label>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveFilter" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalSwitch" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ova akcija će ažurirati status ovog servisa na SERVISIRANO. Da li ste sigurni da želite da nastavite?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSwitch" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalRemove" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izbaci</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ova akcija će izbaciti ovaj red iz tabele. Da li ste sigurni da želite da nastavite?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnRemove" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <form class="form-row" id="formUpdate">
+                        <div class="form-group col-md-12">
+                            <label for="formUpdateTip">Servis 1</label>
+                            <textarea type="text" class="form-control" id="formUpdateTip" placeholder="Tip servisa..."></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateNabavna" placeholder="Nabavna cena">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateProdajna" placeholder="Prodajna cena">
+                        </div>
+                    </form>
+                    <div class="modal-update-add-service">Dodaj Servis <i class="fas fa-plus"></i></div> -->
+                    <form id="formUpdate">
+                        <div class="form-group">
+                            <label for="nabavnaCena">Nabavna cena</label>
+                            <input type="text" class="form-control" id="nabavnaCena">
+                        </div>
+                        <div class="form-group">
+                            <label for="naplatnaCena">Naplatna cena</label>
+                            <input type="text" class="form-control" id="naplatnaCena">
+                        </div>
+                        <p>Ili</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="vraceno">
+                            <label class="form-check-label" for="vraceno">
+                              Vraćeno bez servisa
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveUpdate" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalView" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pregled</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getServiceForView}}
+                    <form id="formView">
+                        <div class="form-group">
+                            <div class="form-view-title">Datum:</div>
+                            <div class="form-view-value">{{formatDateWithTime datum}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Status:</div>
+                            <div class="form-view-value">{{capitalize status}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Ime i Prezime:</div>
+                            <div class="form-view-value">{{imeIPrezime}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Kontakt Telefon:</div>
+                            <div class="form-view-value">{{kontaktTelefon}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Model Uredjaja:</div>
+                            <div class="form-view-value">{{modelUredjaja}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">IMEI Broj:</div>
+                            <div class="form-view-value">{{imeiBroj}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Opis Posla:</div>
+                            <div class="form-view-value">{{opisPosla}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Očekivana Cena:</div>
+                            <div class="form-view-value">{{ocekivanaCena}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Nabavna Cena:</div>
+                            <div class="form-view-value">{{nabavnaCena}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Naplatna Cena:</div>
+                            <div class="form-view-value">{{naplatnaCena}}</div>
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izmeni</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getServiceForView}}
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <label for="imeIPrezimeEdit">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezimeEdit" value="{{imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonEdit">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefonEdit" value="{{kontaktTelefon}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjajaEdit">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjajaEdit" value="{{modelUredjaja}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBrojEdit">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBrojEdit" value="{{imeiBroj}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="opisPoslaEdit">Opis posla</label>
+                            <textarea class="form-control" id="opisPoslaEdit" value="{{opisPosla}}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="ocekivanaCenaEdit">Očekivana cena</label>
+                            <input type="text" class="form-control" id="ocekivanaCenaEdit" value="{{ocekivanaCena}}">
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnEdit" data-dismiss="modal">Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalEditNaplaceno" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izmeni</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getServiceForView}}
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <label for="imeIPrezimeEditNaplaceno">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezimeEditNaplaceno" value="{{imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonEditNaplaceno">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefonEditNaplaceno" value="{{kontaktTelefon}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjajaEditNaplaceno">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjajaEditNaplaceno" value="{{modelUredjaja}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBrojEditNaplaceno">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBrojEditNaplaceno" value="{{imeiBroj}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="opisPoslaEditNaplaceno">Opis posla</label>
+                            <textarea class="form-control" id="opisPoslaEditNaplaceno" value="{{opisPosla}}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="ocekivanaCenaEditNaplaceno">Očekivana cena</label>
+                            <input type="text" class="form-control" id="ocekivanaCenaEditNaplaceno" value="{{ocekivanaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="nabavnaCenaEditNaplaceno">Nabavna cena</label>
+                            <input type="text" class="form-control" id="nabavnaCenaEditNaplaceno" value="{{nabavnaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="naplatnaCenaEditNaplaceno">Naplatna cena</label>
+                            <input type="text" class="form-control" id="naplatnaCenaEditNaplaceno" value="{{naplatnaCena}}">
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnEditNaplaceno" data-dismiss="modal">Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalPdf" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Štampaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {{#with getServiceForView}}
+                    <div id="pdfDoc">
+                        
+                        <div class="pdf-doc-header">
+                            <div class="pdf-doc-header-left">
+                                <span class="pdf-doc-header-left-title">Telix Užice</span><br>
+                                <span class="pdf-doc-header-left-content">Servis telefona i računara</span>
+                                <span class="pdf-doc-header-left-content">Prodaja telefona i</span>
+                                <span class="pdf-doc-header-left-content">dodatne opreme</span><br>
+
+                                Slanuška 19, 31000 Užice<br>
+                                telixrs@gmail.com<br>
+                                +381 (0) 60 7 031 001
+                            </div>
+                            <div class="pdf-doc-header-right">
+                                <img id="pdfDocImg" src="telix_2.webp">
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-row">
+                            <div class="pdf-doc-row-left">
+                                <div class="pdf-doc-row-left-title">Ime i prezime</div>
+                                <div class="pdf-doc-row-left-content">
+                                    {{#if imeIPrezime}}
+                                    {{imeIPrezime}}
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="pdf-doc-row-right">
+                                <div class="pdf-doc-row-right-title">Kontakt telefon</div>
+                                <div class="pdf-doc-row-right-content">
+                                    {{#if kontaktTelefon}}
+                                    {{kontaktTelefon}}
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pdf-doc-row">
+                            <div class="pdf-doc-row-left">
+                                <div class="pdf-doc-row-left-title">Model uređaja</div>
+                                <div class="pdf-doc-row-left-content">
+                                    {{#if modelUredjaja}}
+                                    {{modelUredjaja}}
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="pdf-doc-row-right">
+                                <div class="pdf-doc-row-right-title">Imei / Serijski broj</div>
+                                <div class="pdf-doc-row-right-content">
+                                    {{#if imeiBroj}}
+                                    {{imeiBroj}}
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pdf-doc-row">
+                            <div class="pdf-doc-row-left">
+                                <div class="pdf-doc-row-left-title">Datum</div>
+                                <div class="pdf-doc-row-left-content">{{formatDateWithTime getCurrentDate}}</div>
+                            </div>
+                            <div class="pdf-doc-row-right">
+                                <div class="pdf-doc-row-right-title">Opis Posla</div>
+                                <div class="pdf-doc-row-right-content">
+                                    {{#if opisPosla}}
+                                    {{opisPosla}}
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pdf-doc-row">
+                            <div class="pdf-doc-row-left">
+                                <div class="pdf-doc-row-left-title">Očekivana cena servisa</div>
+                                <div class="pdf-doc-row-left-content">
+                                    {{#if ocekivanaCena}}
+                                    {{ocekivanaCena}} RSD
+                                    {{else}}
+                                    /
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="pdf-doc-row-right">
+                                <div class="pdf-doc-row-right-title">Primio na servis</div>
+                                <div class="pdf-doc-row-right-content">Dušan Savić</div>
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-text">
+                            <div class="pdf-doc-text-title">
+                                Uslovi i odredbe servisa
+                            </div>
+                            <div class="pdf-doc-text-content">
+                                -        Ukoliko cenu servisa nije bilo moguće utvrditi pre dijagnostike, serviser je dužan da obavesti klijenta o ceni 
+                                servisa pre pristupanja samom servisu nakon dijagnostike <br>
+                                -        Ukoliko se nakon definisane cene servisa uoče dodatni kvarovi koji iziskuju uvećane troškove serviser je 
+                                dužan da o tome prvobitno obavesti klijenta I dogovori nove uslove servisa <br>
+                                -        Ukoliko je uređaj na servisu ostavljen zbog neispravnog ekrana, serviser nije odgovoran za ispravnost ostalih
+                                komponenti uređaja jer njihovu funkcionalnost nije bilo moguće utvrditi prijemom uređaja na servis <br>
+                                -        Serviser je dužan da obavesti klijenta o završenom servisu čim je proces kompletiran a najkasnije u roku 
+                                od 14 dana od dana prijema uređaja na servis <br>
+                                -        Ukoliko uređaj ostane u servisu duže od 30 dana nakon izvršene dijagnostike/servisa, o čemu će biti 
+                                obavešten od strane servisera, uređaj se rashoduje I servis nije dužan da nadoknadi štetu <br>
+                                -        Klijent je u obavezi da prilikom preuzimanja uređaja sa servisa donese revers o prijemu uređaja na 
+                                servis ili isti neće biti u mogućnosti da preuzme
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-sign">
+                            <div class="pdf-doc-sign-left">
+                                Potpis Servisera <br>
+                                <hr>
+                            </div>
+                            <div class="pdf-doc-sign-right">
+                                Potpis Klijenta <br>
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnPrint" data-dismiss="modal">Štampaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-box services-table">
+        <div class="table-header">
+            <div class="table-header-filter" data-toggle="modal" data-target="#modalFilter">
+                Status: {{getFilterStatus}} <i class="fas fa-chevron-down"></i>
+            </div>
+            <input type="search" id="servisiSearch" placeholder="Pretraži servise...">
+            <!-- <div class="table-header-filter">Filter 1: Kategorija</div>
+            <div class="table-header-filter">Filter 1: Kategorija</div> -->
+
+            <div class="table-header-add" data-toggle="modal" data-target="#modalAdd">DODAJ <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="table-main">
+            <div class="table-main-head">
+                <div class="table-main-head-row">
+                    <div class="table-main-head-row-item">#</div>
+                    <div class="table-main-head-row-item">Datum</div>
+                    <div class="table-main-head-row-item">Status</div>
+                    <div class="table-main-head-row-item">Ime i prezime</div>
+                    <div class="table-main-head-row-item">Kontakt telefon</div>
+                    <div class="table-main-head-row-item">Model uredjaja</div>
+                    <div class="table-main-head-row-item">IMEI broj</div>
+                    <div class="table-main-head-row-item">Opis posla</div>
+                    <div class="table-main-head-row-item">Očekivana cena</div>
+                    <div class="table-main-head-row-item"></div>
+                </div>
+            </div>
+            <div class="table-main-body">
+                {{#each getServices}}
+                <div class="table-main-body-row servisi-search-row {{#if obojen}}colored{{/if}}">
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="1">{{getRowNumber @index}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{formatDateWithTime datum}}">{{formatDateWithTime datum}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{status}}"><span class="status-label {{status}}">{{status}}</span></div>
+                    <div class="table-main-body-row-item servisi-search-target" data-toggle="tooltip" data-placement="top" title="{{imeIPrezime}}">{{imeIPrezime}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{kontaktTelefon}}">{{kontaktTelefon}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{modelUredjaja}}">{{modelUredjaja}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{imeiBroj}}">{{imeiBroj}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{opisPosla}}">{{opisPosla}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{ocekivanaCena}} RSD">
+                        {{#if ocekivanaCena}}
+                        {{ocekivanaCena}} RSD
+                        {{else}}
+                        /
+                        {{/if}}
+                    </div>
+                    <div class="table-main-body-row-item">
+                        {{#if isEqual status 'primljeno'}}
+                        <div class="btn-update-status to-servisirano" data-toggle="modal" data-target="#modalSwitch">AŽ</div>
+                        <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'servisirano'}}
+                        <div class="btn-update-status to-naplaceno" data-toggle="modal" data-target="#modalUpdate">AŽ</div>
+                        <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'naplaceno'}}
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEditNaplaceno"><i class="fas fa-edit"></i></div>
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'vraceno'}}
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                        <!-- <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div> -->
+                        {{/if}}
+                    </div>
+
+                    
+                </div>
+                <!-- <div class="table-main-body-collapse">
+                    <div class="table-main-body-collapse-desc">Model uredjaja: {{modelUredjaja}}</div>
+                    <div class="table-main-body-collapse-desc">Opis posla: {{opisPosla}}</div>
+                </div> -->
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    {{/if}}
+</template>

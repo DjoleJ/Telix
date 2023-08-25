@@ -1,0 +1,361 @@
+<template name="komitenti">
+    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+
+    <div class="modal modal-dark fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Dodaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdd">
+                        <div class="form-group">
+                            <label for="imeIPrezime">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezime">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefon">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefon">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalFilter" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filtriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFilter">
+                        <div class="form-group">
+                            <label>Status</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusSve" value="sve" {{ifFilterChecked 'sve'}}>
+                                <label class="form-check-label" for="filterStatusSve">Sve</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusPrimljeno" value="primljeno" {{ifFilterChecked 'primljeno'}}>
+                                <label class="form-check-label" for="filterStatusPrimljeno">Primljeno</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusServisirano" value="servisirano" {{ifFilterChecked 'servisirano'}}>
+                                <label class="form-check-label" for="filterStatusServisirano">Servisirano</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusNaplaceno" value="naplaceno" {{ifFilterChecked 'naplaceno'}}>
+                                <label class="form-check-label" for="filterStatusNaplaceno">Naplaćeno</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveFilter" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalMinus" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formMinus">
+                        <div class="form-group">
+                            <label for="formMinusKupac">Kupac</label>
+                            <input type="text" class="form-control" id="formMinusKupac">
+                        </div>
+                        <div class="form-group">
+                            <label for="formMinusKomada">Komada</label>
+                            <input type="text" class="form-control" id="formMinusKomada">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnMinus" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalPlus" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPlus">
+                        <div class="form-group">
+                            <label for="formPlusKomada">Komada</label>
+                            <input type="text" class="form-control" id="formPlusKomada">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnPlus" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalSwitch" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ova akcija će skinuti ovaj deo sa stanja. Da li ste sigurni da želite da nastavite?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSwitch" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalRemove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izbaci</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ova akcija će izbaciti ovaj red iz tabele. Da li ste sigurni da želite da nastavite?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnRemove" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <form class="form-row" id="formUpdate">
+                        <div class="form-group col-md-12">
+                            <label for="formUpdateTip">Servis 1</label>
+                            <textarea type="text" class="form-control" id="formUpdateTip" placeholder="Tip servisa..."></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateNabavna" placeholder="Nabavna cena">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateProdajna" placeholder="Prodajna cena">
+                        </div>
+                    </form>
+                    <div class="modal-update-add-service">Dodaj Servis <i class="fas fa-plus"></i></div> -->
+                    <form id="formUpdate">
+                        <div class="form-group">
+                            <label for="nabavnaCena">Nabavna cena</label>
+                            <input type="text" class="form-control" id="nabavnaCena">
+                        </div>
+                        <div class="form-group">
+                            <label for="naplatnaCena">Naplatna cena</label>
+                            <input type="text" class="form-control" id="naplatnaCena">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveUpdate" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalView" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pregled</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getServiceForView}}
+                    <form id="formView">
+                        <div class="form-group">
+                            <div class="form-view-title">Datum:</div>
+                            <div class="form-view-value">{{formatDateWithTime datum}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Status:</div>
+                            <div class="form-view-value">{{capitalize status}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Ime i Prezime:</div>
+                            <div class="form-view-value">{{imeIPrezime}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Kontakt Telefon:</div>
+                            <div class="form-view-value">{{kontaktTelefon}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Model Uredjaja:</div>
+                            <div class="form-view-value">{{modelUredjaja}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">IMEI Broj:</div>
+                            <div class="form-view-value">{{imeiBroj}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Opis Posla:</div>
+                            <div class="form-view-value">{{opisPosla}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Očekivana Cena:</div>
+                            <div class="form-view-value">{{ocekivanaCena}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Nabavna Cena:</div>
+                            <div class="form-view-value">{{nabavnaCena}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Naplatna Cena:</div>
+                            <div class="form-view-value">{{naplatnaCena}}</div>
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izmeni</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getClientForView}}
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <label for="imeIPrezimeEdit">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezimeEdit" value="{{imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonEdit">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefonEdit" value="{{kontaktTelefon}}">
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnEdit" data-dismiss="modal">Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-box delovi-prodaje komitenti">
+        <div class="table-header table-header-komitenti">
+            <!-- <div class="table-header-filter" data-toggle="modal" data-target="#modalFilter">
+                Status: {{getFilterStatus}} <i class="fas fa-chevron-down"></i>
+            </div> -->
+            <input type="search" id="komitentiSearch" placeholder="Pretraži komitente...">
+            <!-- <div class="table-header-filter">Filter 1: Kategorija</div>
+            <div class="table-header-filter">Filter 1: Kategorija</div> -->
+
+            <div class="table-header-add" data-toggle="modal" data-target="#modalAdd">DODAJ <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="table-main">
+            <div class="table-main-head">
+                <div class="table-main-head-row">
+                    <div class="table-main-head-row-item">Ime i Prezime</div>
+                    <div class="table-main-head-row-item">Kontakt Telefon</div>
+                    <div class="table-main-head-row-item">Servisi</div>
+                    <div class="table-main-head-row-item">Telefoni</div>
+                    <div class="table-main-head-row-item">Artikli</div>
+                    <div class="table-main-head-row-item">Artikli 2</div>
+                    <div class="table-main-head-row-item">Delovi</div>
+                    <div class="table-main-head-row-item"></div>
+                </div>
+            </div>
+            <div class="table-main-body">
+                {{#each getClients}}
+                <div class="table-main-body-row komitenti-search-row">
+                    <div class="table-main-body-row-item komitenti-search-target" data-toggle="tooltip" data-placement="top" title="{{imeIPrezime}}">{{imeIPrezime}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{kontaktTelefon}}">{{kontaktTelefon}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{servisi}}">{{servisi}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{telefoni}}">{{telefoni}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{artikli}}">{{artikli}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{artikli2}}">{{artikli2}}</div>
+                    <div class="table-main-body-row-item" data-toggle="tooltip" data-placement="top" title="{{delovi}}">{{delovi}}</div>
+                    <div class="table-main-body-row-item">
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+                <!-- <div class="table-main-body-collapse">
+                    <div class="table-main-body-collapse-desc">Model uredjaja: {{modelUredjaja}}</div>
+                    <div class="table-main-body-collapse-desc">Opis posla: {{opisPosla}}</div>
+                </div> -->
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    {{/if}}
+</template>

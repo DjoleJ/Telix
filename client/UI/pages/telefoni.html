@@ -1,0 +1,828 @@
+<template name="telefoni">
+    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+    <div class="modal modal-dark fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Dodaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdd">
+                        <div class="form-group">
+                            <label for="imeIPrezime">Ime i prezime prodavca</label>
+                            <input type="text" class="form-control" id="imeIPrezime">
+                        </div>
+                        <div class="form-group">
+                            <label for="jmbg">JMBG prodavca</label>
+                            <input type="text" class="form-control" id="jmbg">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefon">Kontakt telefon prodavca</label>
+                            <input type="text" class="form-control" id="kontaktTelefon">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjaja">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjaja">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBroj">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBroj">
+                        </div>
+                        <div class="form-group">
+                            <label for="oprema">Oprema</label>
+                            <textarea class="form-control" id="oprema"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="otkupnaCena">Otkupna cena</label>
+                            <input type="text" class="form-control" id="otkupnaCena">
+                        </div>
+                        <div class="form-group">
+                            <label for="preporucenaCena">Preporučena cena</label>
+                            <input type="text" class="form-control" id="preporucenaCena">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status">
+                                <option value="zaServis">Za servis</option>
+                                <option value="naStanju">Na stanju</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="slika">Slika</label>
+                            <input type="file" class="form-control-file" id="slika">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalFilter" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filtriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formFilter">
+                        <div class="form-group">
+                            <label>Status</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus" id="filterStatusSve"
+                                    value="sve" {{ifFilterChecked 'sve' }}>
+                                <label class="form-check-label" for="filterStatusSve">Sve</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus"
+                                    id="filterStatusZaServis" value="zaServis" {{ifFilterChecked 'zaServis' }}>
+                                <label class="form-check-label" for="filterStatusZaServis">Za servis</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus"
+                                    id="filterStatusNaStanju" value="naStanju" {{ifFilterChecked 'naStanju' }}>
+                                <label class="form-check-label" for="filterStatusNaStanju">Na stanju</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="filterStatus"
+                                    id="filterStatusProdato" value="prodato" {{ifFilterChecked 'prodato' }}>
+                                <label class="form-check-label" for="filterStatusProdato">Prodato</label>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveFilter" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalSwitch" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Ova akcija će ažurirati status ovog servisa na NA STANJU. Da li ste sigurni da želite da
+                    nastavite? -->
+                    <div class="form-group">
+                        <label for="cenaPopravke">Cena popravke</label>
+                        <input type="text" class="form-control" id="cenaPopravke">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSwitch" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalRemove" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izbaci</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ova akcija će izbaciti ovaj red iz tabele. Da li ste sigurni da želite da nastavite?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnRemove" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ažuriraj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <form class="form-row" id="formUpdate">
+                        <div class="form-group col-md-12">
+                            <label for="formUpdateTip">Servis 1</label>
+                            <textarea type="text" class="form-control" id="formUpdateTip" placeholder="Tip servisa..."></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateNabavna" placeholder="Nabavna cena">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="formUpdateProdajna" placeholder="Prodajna cena">
+                        </div>
+                    </form>
+                    <div class="modal-update-add-service">Dodaj Servis <i class="fas fa-plus"></i></div> -->
+                    <form id="formUpdate">
+                        <div class="form-group">
+                            <label for="status">Komitent</label>
+                            <select class="form-control" id="komitentUpdate">
+                                <option value="0">Izaberi komitenta</option>
+                                {{#each getClients}}
+                                <option value="{{_id}}">
+                                    {{imeIPrezime}} {{#if hasContact kontaktTelefon}}&lt;{{kontaktTelefon}}&gt;{{/if}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imeIPrezimeUpdate">Ime i prezime</label>
+                            <input type="text" class="form-control" id="imeIPrezimeUpdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonUpdate">Kontakt telefon</label>
+                            <input type="text" class="form-control" id="kontaktTelefonUpdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="jmbgUpdate">JMBG</label>
+                            <input type="text" class="form-control" id="jmbgUpdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodajnaCenaUpdate">Prodajna cena</label>
+                            <input type="text" class="form-control" id="prodajnaCenaUpdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="tipProdaje">Tip prodaje</label>
+                            <select class="form-control" id="tipProdaje">
+                                <option value="gotovina">Gotovina</option>
+                                <option value="naRate">Na rate</option>
+                            </select>
+                        </div>
+                        {{#if isEqual getTipProdaje 'naRate'}}
+                        <div class="form-group">
+                            <label for="rata1">Rata 1</label>
+                            <input type="text" class="form-control" id="rata1">
+                            <input type="date" class="form-control" id="rata1Datum">
+                        </div>
+                        <div class="form-group">
+                            <label for="rata2">Rata 2</label>
+                            <input type="text" class="form-control" id="rata2">
+                            <input type="date" class="form-control" id="rata2Datum">
+                        </div>
+                        <div class="form-group">
+                            <label for="rata3">Rata 3</label>
+                            <input type="text" class="form-control" id="rata3">
+                            <input type="date" class="form-control" id="rata3Datum">
+                        </div>
+                        {{/if}}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSaveUpdate" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalView" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pregled</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getPhoneForView}}
+                    <form id="formView">
+                        <div class="form-group">
+                            <div class="form-view-title">Slika:</div>
+                            <img id="modalImg" src="http://localhost:3000/cfs/files/images/{{image}}">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Datum:</div>
+                            <div class="form-view-value">{{formatDateWithTime datum}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Status:</div>
+                            <div class="form-view-value">
+                                {{#if isEqual status 'zaServis'}}
+                                Za servis
+                                {{/if}}
+                                {{#if isEqual status 'naStanju'}}
+                                Na stanju
+                                {{/if}}
+                                {{#if isEqual status 'prodato'}}
+                                Prodato
+                                {{/if}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Prodavac:</div>
+                            <div class="form-view-value">{{prodavac.imeIPrezime}}<br>{{prodavac.kontaktTelefon}}<br>{{prodavac.jmbg}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Model Uredjaja:</div>
+                            <div class="form-view-value">{{modelUredjaja}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">IMEI Broj:</div>
+                            <div class="form-view-value">{{imeiBroj}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Oprema:</div>
+                            <div class="form-view-value">{{oprema}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Otkupna Cena:</div>
+                            <div class="form-view-value">{{otkupnaCena}} RSD</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Preporučena Cena:</div>
+                            <div class="form-view-value">{{preporucenaCena}} RSD</div>
+                        </div>
+                        {{#if isEqual status 'prodato'}}
+                        <div class="form-group">
+                            <div class="form-view-title">Kupac:</div>
+                            <div class="form-view-value">{{kupac.imeIPrezime}}<br>{{kupac.kontaktTelefon}}<br>{{kupac.jmbg}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Datum Prodaje:</div>
+                            <div class="form-view-value">{{formatDateWithTime datumProdaje}}</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Prodajna Cena:</div>
+                            <div class="form-view-value">{{prodajnaCena}} RSD</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-view-title">Tip Prodaje:</div>
+                            <div class="form-view-value">{{#if isEqual tipProdaje.tip 'naRate'}} Na rate {{else}} Gotovina {{/if}}</div>
+                        </div>
+                        {{#if isEqual tipProdaje.tip 'naRate'}}
+                        <div class="form-group">
+                            <div class="form-view-title">Rata 1:</div>
+                            <div class="form-view-value">{{tipProdaje.rata1.rata1}}</div>
+                            <div class="form-view-value">
+                                {{formatDateWithTime tipProdaje.rata1.rata1Datum}}
+                            </div>
+                            <div class="form-view-value" data-placeno="rata1">
+                                {{#if tipProdaje.rata1.placeno}} <i class="fas fa-check-circle placeno-true"></i> {{else}} <i class="far fa-times-circle placeno-false"></i> {{/if}}
+                            </div>
+                        </div>
+                        {{#if isEqual tipProdaje.rata2.rata2 '/'}}
+                        {{else}}
+                        <div class="form-group">
+                            <div class="form-view-title">Rata 2:</div>
+                            <div class="form-view-value">{{tipProdaje.rata2.rata2}}</div>
+                            <div class="form-view-value">
+                                {{formatDateWithTime tipProdaje.rata2.rata2Datum}}
+                            </div>
+                            <div class="form-view-value" data-placeno="rata2">
+                                {{#if tipProdaje.rata2.placeno}} <i class="fas fa-check-circle placeno-true"></i> {{else}} <i class="far fa-times-circle placeno-false"></i> {{/if}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if isEqual tipProdaje.rata3.rata3 '/'}}
+                        {{else}}
+                        <div class="form-group">
+                            <div class="form-view-title">Rata 3:</div>
+                            <div class="form-view-value">{{tipProdaje.rata3.rata3}}</div>
+                            <div class="form-view-value">
+                                {{formatDateWithTime tipProdaje.rata3.rata3Datum}}
+                            </div>
+                            <div class="form-view-value" data-placeno="rata3">
+                                {{#if tipProdaje.rata3.placeno}} <i class="fas fa-check-circle placeno-true"></i> {{else}} <i class="far fa-times-circle placeno-false"></i> {{/if}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{/if}}
+                        {{/if}}
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izmeni</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getPhoneForView}}
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <label for="imeIPrezimeEdit">Ime i prezime prodavca</label>
+                            <input type="text" class="form-control" id="imeIPrezimeEdit" value="{{prodavac.imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="jmbgEdit">JMBG prodavca</label>
+                            <input type="text" class="form-control" id="jmbgEdit" value="{{prodavac.jmbg}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonEdit">Kontakt telefon prodavca</label>
+                            <input type="text" class="form-control" id="kontaktTelefonEdit" value="{{prodavac.kontaktTelefon}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjajaEdit">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjajaEdit" value="{{modelUredjaja}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBrojEdit">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBrojEdit" value="{{imeiBroj}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="opremaEdit">Oprema</label>
+                            <textarea class="form-control" id="opremaEdit" value="{{oprema}}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="otkupnaCenaEdit">Otkupna cena</label>
+                            <input type="text" class="form-control" id="otkupnaCenaEdit" value="{{otkupnaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="preporucenaCenaEdit">Preporučena cena</label>
+                            <input type="text" class="form-control" id="preporucenaCenaEdit" value="{{preporucenaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="slikaEdit">Slika</label>
+                            <input type="file" class="form-control-file" id="slikaEdit" value="{{slika}}">
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnEdit" data-dismiss="modal">Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-dark fade" id="modalEditProdato" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Izmeni</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{#with getPhoneForView}}
+                    <form id="formEdit">
+                        <div class="form-group">
+                            <label for="imeIPrezimeEditProdato">Ime i prezime prodavca</label>
+                            <input type="text" class="form-control" id="imeIPrezimeEditProdato" value="{{prodavac.imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="jmbgEditProdato">JMBG prodavca</label>
+                            <input type="text" class="form-control" id="jmbgEditProdato" value="{{prodavac.jmbg}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonEditProdato">Kontakt telefon prodavca</label>
+                            <input type="text" class="form-control" id="kontaktTelefonEditProdato" value="{{prodavac.kontaktTelefon}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modelUredjajaEditProdato">Modal uredjaja</label>
+                            <input type="text" class="form-control" id="modelUredjajaEditProdato" value="{{modelUredjaja}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeiBrojEditProdato">IMEI broj</label>
+                            <input type="text" class="form-control" id="imeiBrojEditProdato" value="{{imeiBroj}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="opremaEditProdato">Oprema</label>
+                            <textarea class="form-control" id="opremaEditProdato" value="{{oprema}}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="otkupnaCenaEditProdato">Otkupna cena</label>
+                            <input type="text" class="form-control" id="otkupnaCenaEditProdato" value="{{otkupnaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="preporucenaCenaEditProdato">Preporučena cena</label>
+                            <input type="text" class="form-control" id="preporucenaCenaEditProdato" value="{{preporucenaCena}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="slikaEditProdato">Slika</label>
+                            <input type="file" class="form-control-file" id="slikaEditProdato" value="{{slika}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imeIPrezimeKupacEditProdato">Ime i prezime kupca</label>
+                            <input type="text" class="form-control" id="imeIPrezimeKupacEditProdato" value="{{kupac.imeIPrezime}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktTelefonKupacEditProdato">Kontakt telefon kupca</label>
+                            <input type="text" class="form-control" id="kontaktTelefonKupacEditProdato" value="{{kupac.kontaktTelefon}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="jmbgKupacEditProdato">JMBG kupca</label>
+                            <input type="text" class="form-control" id="jmbgKupacEditProdato" value="{{kupac.jmbg}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="prodajnaCenaEditProdato">Prodajna cena</label>
+                            <input type="text" class="form-control" id="prodajnaCenaEditProdato" value="{{prodajnaCena}}">
+                        </div>
+                    </form>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnEditProdato" data-dismiss="modal">Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal modal-dark fade" id="modalPdf" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Štampaj</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {{#with getPhoneForView}}
+                    <div id="pdfDocPhones">
+                        
+                        <div class="pdf-doc-phones-title">
+                            Ugovor o prodaji proizvoda na rate
+                        </div>
+
+                        <div class="pdf-doc-phones-title-mini">
+                            Zaključen dana {{formatDateWithTime getCurrentDate}} godine, u Užicu između: <br><br>
+
+                            <span>- “Dušan Savić Pr Telix Užice”, Pib: 113618247, Slanuška 19, Užice 31000</span>
+                            <span>- {{kupac.imeIPrezime}} JMBG: {{kupac.jmbg}}</span>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 1.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Ugovorom o prodaji proizvoda na rate obavezuje se Prodavac da preda Kupcu proizvod koji je predmet ovog robu pre nego što mu cena iste bude potpunosti isplaćena, a Kupac se obavezuje da cenu proizvoda isplati u ratama, u određenim vremenskim razmacima.<br><br>
+
+                                Prodavac prodaje Kupcu proizvod {{modelUredjaja}} po ceni od {{prodajnaCena}} rsd. Kupac će u gotovom novcu isplatiti prodavcu u 2 mesečne rate utvrđene Članom 4. ovog ugovora.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 2.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Ugovorne strane su se sporazumele da Prodavac ugovoreni poizvod isporuči pošto mu kupac dostavi sve potrebne podatke i potvrde. 
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 3.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Prijem i predaja proizvoda će se izvršiti na mestu prijema kod Kupca, u maloprodajnom objektu na adresi Slanuška 19, 31000 Užice a Kupac će prvu ratu platiti {{formatDateWithoutTime tipProdaje.rata1.rata1Datum}}, a ostatak onako kako je definisano u članu 4. ovog ugovora.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 4.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Ugovorenu cenu iz čl. 1. Ugovora Kupac je dužan da isplati po ugovoru, u ratama i to: <br><br>
+
+                                a) I rata {{tipProdaje.rata1.rata1}} rsd, dana {{formatDateWithoutTime tipProdaje.rata1.rata1Datum}} <br>
+                                {{#if isEqual tipProdaje.rata2.rata2 '/'}}
+                                {{else}}
+                                b) II rata {{tipProdaje.rata2.rata2}} rsd, u roku od 30 (trideset) dana od dana plaćanja prve rate, a najkasnije do {{formatDateWithoutTime tipProdaje.rata2.rata2Datum}} godine <br><br>
+                                {{/if}}
+                                {{#if isEqual tipProdaje.rata3.rata3 '/'}}
+                                {{else}}
+                                b) III rata {{tipProdaje.rata3.rata3}} rsd, u roku od 30 (trideset) dana od dana plaćanja prve rate, a najkasnije do {{formatDateWithoutTime tipProdaje.rata3.rata3Datum}} godine <br><br>
+                                {{/if}}
+                                
+
+                                Sve rate su bez obračuna kamate.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 5.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Kupac tokom trajanja ugovora u svakom trenutku može Prodavcu odjednom da isplati preostali iznos kupoprodajne cene, bez ugovorene kamate i drugih troškova.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 6.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Kupac je saglasan da u slučaju zakašnjenja u plaćanju bilo koje rate, Prodavac može zaračunati zakonom utvrđenu zateznu kamatu za svaki dan kašnjenja i zahtevati od kupca isplatu celog ostatka cene, ali je pre toga dužan da kupcu ostavi naknadni rok od petnaest dana.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 7.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                U slučaju raskida Ugovora usled opravdane reklamacije koje su utvrđene pravilnikom o reklamacijama Prodavaca, prodavac je dužan da vrati Kupcu primljene otplate ili da izvrši zamenu za drugi proizvod. Sa svoje strane Kupac je dužan da vrati Prodavcu robu u originalnoj ambalaži u koj je bila kad mu je bila predate
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 8.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Na zahtev Kupca sud može, ukoliko to okolnosti slučaja opravdavaju, da produži rokove za isplatu zakasnelih otplata, uz uslov da Kupac da garanciju da će izvršiti svoje obaveze, i ako usled toga Prodavac ne trpi štetu.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 9.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                U slučaju da dođe do spora po ovom ugovoru nadležan je Trgovinski sud u Beogradu.
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-row">
+                            <div class="pdf-doc-phones-row-title">
+                                Član 10.
+                            </div>
+                            <div class="pdf-doc-phones-row-content">
+                                Ovaj ugovor je zaključen u dva primerka, od kojih svaka ugovorna strana zadržava po jedan primerak
+                            </div>
+                        </div>
+
+                        <div class="pdf-doc-phones-sign">
+                            <div class="pdf-doc-phones-sign-left">
+                                Prodavac <br>
+                                <hr>
+                            </div>
+                            <div class="pdf-doc-phones-sign-right">
+                                Kupac <br>
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+                    {{/with}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-save" id="btnPrint" data-dismiss="modal">Štampaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="table-box">
+        <div class="table-header">
+            {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+            <div class="table-header-filter" data-toggle="modal" data-target="#modalFilter">
+                Status: {{getFilterStatus}} <i class="fas fa-chevron-down"></i>
+            </div>
+            <!-- <div class="table-header-filter">Filter 1: Kategorija</div>
+            <div class="table-header-filter">Filter 1: Kategorija</div> -->
+
+            <div class="table-header-add" data-toggle="modal" data-target="#modalAdd">DODAJ <i class="fas fa-plus"></i>
+            </div>
+            {{/if}}
+        </div>
+        <div class="table-main">
+            <div class="table-main-head">
+                <div class="table-main-head-row phones">
+                    <div class="table-main-head-row-item phones">#</div>
+                    <div class="table-main-head-row-item phones">Slika</div>
+                    <div class="table-main-head-row-item phones">Datum</div>
+                    <div class="table-main-head-row-item phones">Status</div>
+                    <div class="table-main-head-row-item phones">Prodavac</div>
+                    <div class="table-main-head-row-item phones">Model uredjaja</div>
+                    <div class="table-main-head-row-item phones">Oprema</div>
+                    <div class="table-main-head-row-item phones phones-sort" data-sort="preporucenaCena">Preporučena cena <i class="fas fa-sort"></i></div>
+                    <div class="table-main-head-row-item phones phones-sort" data-sort="prodajnaCena">Prodajna cena <i class="fas fa-sort"></i></div>
+                    <!-- <div class="table-main-head-row-item phones">Kupac</div>
+                    <div class="table-main-head-row-item phones">Prodajna cena</div> -->
+                    <div class="table-main-head-row-item phones"></div>
+                </div>
+            </div>
+            <div class="table-main-body">
+                {{#each getPhones}}
+                {{#if isEqual status 'naStanju'}}
+                <div class="table-main-body-row phones">
+                    
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{serial}}">{{serial}}</div>
+                    <div class="table-main-body-row-item phones">
+                        {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                        {{#if image}}
+                        <img id="phoneImg" src="https://www.telix.vip/cfs/files/images/{{image}}">
+                        {{else}}
+                        <img id="phoneImg" src="samsung-galaxy.webp">
+                        {{/if}}
+                        {{/if}}
+                    </div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{formatDateWithTime datum}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{formatDateWithTime datum}}{{/if}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top" title="{{status}}">
+                        {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                        <span class="status-label {{status}} phones">
+                            {{#if isEqual status 'zaServis'}}
+                            Za servis
+                            {{/if}}
+                            {{#if isEqual status 'naStanju'}}
+                            Na stanju
+                            {{/if}}
+                            {{#if isEqual status 'prodato'}}
+                            Prodato
+                            {{/if}}
+                        </span>
+                        {{/if}}
+                    </div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{prodavac.imeIPrezime}}, {{prodavac.kontaktTelefon}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{prodavac.imeIPrezime}}<br>{{prodavac.kontaktTelefon}}{{/if}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{modelUredjaja}}">{{modelUredjaja}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{oprema}}">{{oprema}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{preporucenaCena}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{preporucenaCena}} RSD{{/if}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}">{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}</div>
+                    <!-- <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{kupac.imeIPrezime}}, {{kupac.kontaktTelefon}}">{{#with kupac}}{{imeIPrezime}}, {{kontaktTelefon}}{{else}}/{{/with}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{prodajnaCena}} RSD">{{prodajnaCena}}</div> -->
+                    <div class="table-main-body-row-item phones">
+                        {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                        {{#if isEqual status 'zaServis'}}
+                        <div class="btn-update-status to-servisirano" data-toggle="modal" data-target="#modalSwitch">AŽ</div>
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'naStanju'}}
+                        <div class="btn-update-status to-naplaceno" data-toggle="modal" data-target="#modalUpdate">AŽ</div>
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'prodato'}}
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEditProdato"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                        {{/if}}
+                    </div>
+                </div>
+                {{else}}
+                {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                <div class="table-main-body-row phones">
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{serial}}">{{serial}}</div>
+                    <div class="table-main-body-row-item phones">
+                        {{#if image}}
+                        <img id="phoneImg" src="https://www.telix.vip/cfs/files/images/{{image}}">
+                        {{else}}
+                        <img id="phoneImg" src="samsung-galaxy.webp">
+                        {{/if}}
+                    </div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{formatDateWithTime datum}}">{{formatDateWithTime datum}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top" title="{{status}}">
+                        <span class="status-label {{status}} phones">
+                            {{#if isEqual status 'zaServis'}}
+                            Za servis
+                            {{/if}}
+                            {{#if isEqual status 'naStanju'}}
+                            Na stanju
+                            {{/if}}
+                            {{#if isEqual status 'prodato'}}
+                            Prodato
+                            {{/if}}
+                        </span>
+                    </div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{prodavac.imeIPrezime}}, {{prodavac.kontaktTelefon}}">{{prodavac.imeIPrezime}}<br>{{prodavac.kontaktTelefon}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{modelUredjaja}}">{{modelUredjaja}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{oprema}}">{{oprema}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{preporucenaCena}}">{{preporucenaCena}} RSD</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}">{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}</div>
+                    <!-- <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{kupac.imeIPrezime}}, {{kupac.kontaktTelefon}}">{{#with kupac}}{{imeIPrezime}}, {{kontaktTelefon}}{{else}}/{{/with}}</div>
+                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                        title="{{prodajnaCena}} RSD">{{prodajnaCena}}</div> -->
+                    <div class="table-main-body-row-item phones">
+                        {{#if isEqual status 'zaServis'}}
+                        <div class="btn-update-status to-servisirano" data-toggle="modal" data-target="#modalSwitch">AŽ</div>
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'naStanju'}}
+                        <div class="btn-update-status to-naplaceno" data-toggle="modal" data-target="#modalUpdate">AŽ</div>
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEdit"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        {{#if isEqual status 'prodato'}}
+                        <div class="btn-view-doc" data-toggle="modal" data-target="#modalView"><i class="fas fa-eye"></i></div>
+                        <div class="btn-print-doc" data-toggle="modal" data-target="#modalPdf"><i class="fas fa-print"></i></div>
+                        <div class="btn-edit-doc" data-toggle="modal" data-target="#modalEditProdato"><i class="fas fa-edit"></i></div>
+                        {{/if}}
+                        <div class="btn-remove-doc" data-toggle="modal" data-target="#modalRemove"><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+                {{/if}}
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>

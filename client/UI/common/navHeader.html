@@ -1,0 +1,50 @@
+<template name="navHeader">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+            <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo-box">
+                    <img src="telix.jpg">
+            </div>
+            <div class="menu">
+                    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                    <div class="menu-item" id="servisi">
+                        <p class="menu-item-name {{isActiveRoute regex='servisi'}}">Servisi</p>
+                    </div>
+                    {{/if}}
+                    <div class="menu-item" id="telefoni">
+                        <p class="menu-item-name {{isActiveRoute regex='telefoni'}}">Telefoni</p>
+                    </div>
+                    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                    <div class="menu-item" id="artikli">
+                        <p class="menu-item-name {{isActiveRoute name='artikli'}}">Artikli</p>
+                    </div>
+                    {{/if}}
+                    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                    <div class="menu-item" id="artikliDva">
+                        <p class="menu-item-name {{isActiveRoute regex='artikliDva'}}">Artikli 2</p>
+                    </div>
+                    {{/if}}
+                    <div class="menu-item" id="delovi">
+                        <p class="menu-item-name {{isActiveRoute regex='delovi'}}">Delovi</p>
+                    </div>
+                    {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                    <div class="menu-item" id="komitenti">
+                        <p class="menu-item-name {{isActiveRoute regex='komitenti'}}">Komitenti</p>
+                    </div>
+                    {{/if}}
+                    {{#if isEqual currentUser.username 'admin'}}
+                    <div class="menu-item" id="izvestaji">
+                        <p class="menu-item-name {{isActiveRoute regex='izvestaji'}}">Izveštaji</p>
+                    </div>
+                    {{/if}}
+                    
+            </div>
+
+            <div id="accountInfo">
+                <div id="accountUsername">{{currentUser.username}}</div>
+                <button type="button" class="btn" id="btnLogout">Odjavi se</button>
+            </div>
+    </nav>
+</template>
