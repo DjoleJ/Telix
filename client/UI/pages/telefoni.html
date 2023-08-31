@@ -430,13 +430,6 @@
         </div>
     </div>
 
-    <div id="imgFull">
-        <!-- The Close Button -->
-        <span id="imgFullClose">&times;</span>
-      
-        <!-- Modal Content (The Image) -->
-        <img src="https://www.telix.vip/cfs/files/images/{{withImgFull}}">
-    </div>
 
     <div class="modal modal-dark fade" id="modalEditProdato" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -669,15 +662,25 @@
     </div>
     {{/if}}
 
+    <div id="imgFull">
+        <!-- The Close Button -->
+        <span id="imgFullClose">&times;</span>
+      
+        <!-- Modal Content (The Image) -->
+        <img src="https://www.telix.vip/cfs/files/images/{{withImgFull}}">
+    </div>
+
     <div class="table-box">
         <div class="table-header">
             {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
             <div class="table-header-filter" data-toggle="modal" data-target="#modalFilter">
                 Status: {{getFilterStatus}} <i class="fas fa-chevron-down"></i>
             </div>
+            {{/if}}
+            <input type="search" id="telefoniSearch" placeholder="Pretraži telefone...">
             <!-- <div class="table-header-filter">Filter 1: Kategorija</div>
             <div class="table-header-filter">Filter 1: Kategorija</div> -->
-
+            {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
             <div class="table-header-add" data-toggle="modal" data-target="#modalAdd">DODAJ <i class="fas fa-plus"></i>
             </div>
             {{/if}}
@@ -702,7 +705,7 @@
             <div class="table-main-body">
                 {{#each getPhones}}
                 {{#if isEqual status 'naStanju'}}
-                <div class="table-main-body-row phones">
+                <div class="table-main-body-row phones telefoni-search-row">
                     
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{serial}}">{{serial}}</div>
@@ -718,7 +721,7 @@
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{formatDateWithTime datum}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{formatDateWithTime datum}}{{/if}}</div>
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top" title="{{status}}">
-                        {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+                        <!-- {{#if isEqualOr currentUser.username 'admin' 'radnik'}} -->
                         <span class="status-label {{status}} phones">
                             {{#if isEqual status 'zaServis'}}
                             Za servis
@@ -730,16 +733,20 @@
                             Prodato
                             {{/if}}
                         </span>
-                        {{/if}}
+                        <!-- {{/if}} -->
                     </div>
                     <!-- <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{prodavac.imeIPrezime}}, {{prodavac.kontaktTelefon}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{prodavac.imeIPrezime}}<br>{{prodavac.kontaktTelefon}}{{/if}}</div> -->
-                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                    <div class="table-main-body-row-item phones telefoni-search-target" data-toggle="tooltip" data-placement="top"
                         title="{{modelUredjaja}}">{{modelUredjaja}}</div>
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{oprema}}">{{oprema}}</div>
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
-                        title="{{preporucenaCena}}">{{#if isEqualOr currentUser.username 'admin' 'radnik'}}{{preporucenaCena}} RSD{{/if}}</div>
+                        title="{{preporucenaCena}}">
+                        <!-- {{#if isEqualOr currentUser.username 'admin' 'radnik'}} -->
+                        {{preporucenaCena}} RSD
+                        <!-- {{/if}} -->
+                    </div>
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}">{{#if prodajnaCena}}{{prodajnaCena}} RSD{{else}}/{{/if}}</div>
                     <!-- <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
@@ -769,7 +776,7 @@
                 </div>
                 {{else}}
                 {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
-                <div class="table-main-body-row phones {{#if isColored _id}}colored{{/if}}">
+                <div class="table-main-body-row phones telefoni-search-row {{#if isColored _id}}colored{{/if}}">
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{serial}}">{{serial}}</div>
                     <div class="table-main-body-row-item phones">
@@ -796,7 +803,7 @@
                     </div>
                     <!-- <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{prodavac.imeIPrezime}}, {{prodavac.kontaktTelefon}}">{{prodavac.imeIPrezime}}<br>{{prodavac.kontaktTelefon}}</div> -->
-                    <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
+                    <div class="table-main-body-row-item phones telefoni-search-target" data-toggle="tooltip" data-placement="top"
                         title="{{modelUredjaja}}">{{modelUredjaja}}</div>
                     <div class="table-main-body-row-item phones" data-toggle="tooltip" data-placement="top"
                         title="{{oprema}}">{{oprema}}</div>

@@ -385,14 +385,14 @@
 
     <div class="table-box delovi">
         <div class="table-header">
-            {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
+            <!-- {{#if isEqualOr currentUser.username 'admin' 'radnik'}} -->
             <input type="search" id="deloviSearch" placeholder="Pretraži delove...">
             <!-- <div class="table-header-filter" data-toggle="modal" data-target="#modalFilter">
                 Status: {{getFilterStatus}} <i class="fas fa-chevron-down"></i>
             </div> -->
             <!-- <div class="table-header-filter">Filter 1: Kategorija</div>
             <div class="table-header-filter">Filter 1: Kategorija</div> -->
-
+            {{#if isEqualOr currentUser.username 'admin' 'radnik'}}
             <div class="table-header-add" data-toggle="modal" data-target="#modalAdd">DODAJ <i class="fas fa-plus"></i>
             </div>
             {{/if}}

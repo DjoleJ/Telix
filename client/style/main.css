@@ -1027,7 +1027,8 @@ a, a:hover, a:focus {
 #deloviSearch,
 #servisiSearch,
 #artikliSearch,
-#komitentiSearch  {
+#komitentiSearch,
+#telefoniSearch  {
     width: 400px;
     position: relative;
     height: 40px;

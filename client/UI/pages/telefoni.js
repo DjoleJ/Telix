@@ -545,4 +545,22 @@ Template.telefoni.events({
     'click #imgFullClose'(event) {
         $('#imgFull').css({ 'display': 'none' });
     },
+    'keyup #telefoniSearch'(event) {
+        const searchArr = [];
+        if (event.target.value != "") {
+            const items = $('.telefoni-search-row');
+            $('.telefoni-search-row').attr('style', 'display: none !important');
+
+            items.each(function(index) {
+                const long = $(this).find('.telefoni-search-target').text();
+                // const short = long === 'EUR' ? 'EURO' : long === 'RSD' ? 'DINAR' : 'DOLLAR';
+                
+                if (long.toLowerCase().indexOf(event.target.value.toLowerCase()) != -1) {
+                    $(this).attr('style', 'display: flex !important');
+                }
+            })
+        } else {
+            $('.telefoni-search-row').attr('style', 'display: flex !important');
+        }
+    },
 })
