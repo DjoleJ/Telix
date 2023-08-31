@@ -12,6 +12,7 @@ Template.telefoni.onCreated(function() {
     Session.set('phonesSortOrder', -1);
     Session.set('tipProdaje', null);
     Session.set('printDocName', null);
+    Session.set('imgFull', null);
 
     this.subscribe('phones');
     this.subscribe('clients');
@@ -29,14 +30,22 @@ Template.telefoni.helpers({
         if(status === 'sve') {
             if(sort === 'preporucenaCena') {
                 return Phones.find({}, { sort: { preporucenaCena: order } });
-            } else {
+            } else if(sort === 'prodajnaCena') {
                 return Phones.find({}, { sort: { prodajnaCena: order } });
+            } else if(sort === 'modelUredjaja') {
+                return Phones.find({}, { sort: { modelUredjaja: order } });
+            } else {
+                return Phones.find({}, { sort: { datum: order } });
             }
         } else {
             if(sort === 'preporucenaCena') {
                 return Phones.find({ status: status }, { sort: { preporucenaCena: order } });
-            } else {
+            } else if(sort === 'prodajnaCena') {
                 return Phones.find({ status: status }, { sort: { prodajnaCena: order } });
+            } else if(sort === 'modelUredjaja') {
+                return Phones.find({ status: status }, { sort: { modelUredjaja: order } });
+            } else {
+                return Phones.find({ status: status }, { sort: { datum: order } });
             }
         }
 
@@ -77,6 +86,42 @@ Template.telefoni.helpers({
     hasContact: (contact) => {
         // const client = Clients.find({  })
         return contact !== '';
+    },
+    withImgFull: () => {
+        return Session.get('imgFull');
+    },
+    isColored: (id) => {
+        const phone = Phones.find({ _id: id }).fetch()[0];
+        console.log('phone.serial:', phone.serial);
+        if(phone.status === 'prodato' && phone.tipProdaje.tip === 'naRate') {
+            console.log('prvi if');
+            const rata1 = phone.tipProdaje.rata1;
+            const rata2 = phone.tipProdaje.rata2;
+            const rata3 = phone.tipProdaje.rata3;
+
+            if(!rata1.placeno || !rata2.placeno) {
+                console.log('drugi if');
+                return true;
+            } else {
+                console.log('drugi else');
+                if(rata3.rata3 != '/') {
+                    console.log('treci if');
+                    if(!rata3.placeno) {
+                        console.log('cetrvti if');
+                        return true;
+                    } else {
+                        console.log('cetrvti else');
+                        return false;
+                    }
+                } else {
+                    console.log('treci else');
+                    return false;
+                }
+            }
+        } else {
+            console.log('prvi else');
+            return false;
+        }
     }
 })
 
@@ -489,5 +534,15 @@ Template.telefoni.events({
                 }
             }
         })
-    }
+    },
+    'click #phoneImg'(event) {
+        const id = $(event.target).attr('data-id');
+        if(id) {
+            Session.set('imgFull', id);
+            $('#imgFull').css({ 'display': 'block' });
+        }
+    },
+    'click #imgFullClose'(event) {
+        $('#imgFull').css({ 'display': 'none' });
+    },
 })

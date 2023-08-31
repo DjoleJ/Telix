@@ -651,17 +651,17 @@ a, a:hover, a:focus {
     width: 4%;
 }
 
-.table-main-head-row-item.phones:nth-child(10) {
+.table-main-head-row-item.phones:nth-child(9) {
     width: 13%;
 }
 
-.table-main-head-row-item.phones:nth-child(8) {
+.table-main-head-row-item.phones:nth-child(7) {
     width: 13%;
 }
 
 
 .table-main-head-row-item.phones:nth-child(5),
-.table-main-head-row-item.phones:nth-child(8) {
+.table-main-head-row-item.phones:nth-child(7) {
     width: 15%;
 }
 
@@ -726,11 +726,11 @@ a, a:hover, a:focus {
     width: 13%;
 } */
 
-.table-main-body-row-item.phones:nth-child(8) {
+.table-main-body-row-item.phones:nth-child(7) {
     width: 13%;
 }
 
-.table-main-body-row-item.phones:nth-child(10) {
+.table-main-body-row-item.phones:nth-child(9) {
     display: flex;
     justify-content: center;
     width: 13%;
@@ -743,7 +743,7 @@ a, a:hover, a:focus {
 }
 
 .table-main-body-row-item.phones:nth-child(5),
-.table-main-body-row-item.phones:nth-child(8) {
+.table-main-body-row-item.phones:nth-child(7) {
     width: 15%;
 }
 
@@ -865,6 +865,7 @@ a, a:hover, a:focus {
 
 #phoneImg {
     height: 70px;
+    cursor: pointer;
 }
 
 #modalImg {
@@ -1036,7 +1037,8 @@ a, a:hover, a:focus {
     padding: 5px 10px;
 }
 
-.servisi-search-row.colored {
+.servisi-search-row.colored,
+.table-main-body-row.phones.colored {
     background-color: #f26866;
 }
 
@@ -1486,6 +1488,38 @@ a, a:hover, a:focus {
     width: 80%;
     margin-top: 50px;
 }
+
+#imgFull {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+#imgFull > img {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 600px;
+}
+
+#imgFullClose {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+  }
 
 
 
