@@ -2,10 +2,13 @@ Meteor.methods({
     addArticle: (data) => {
         console.log(data);
 
+        const sifraNum = parseFloat(data.sifra);
+
         Articles.insert({
             datum: new Date().getTime(),
             naziv: data.naziv,
             sifra: data.sifra,
+            sifraNum,
             nabavnaCena: data.nabavnaCena,
             prodajnaCena: data.prodajnaCena,
             komada: data.komada
@@ -23,10 +26,13 @@ Meteor.methods({
     addArticleTwo: (data) => {
         console.log(data);
 
+        const sifraNum = parseFloat(data.sifra);
+
         ArticlesTwo.insert({
             datum: new Date().getTime(),
             naziv: data.naziv,
             sifra: data.sifra,
+            sifraNum,
             nabavnaCena: data.nabavnaCena,
             prodajnaCena: data.prodajnaCena,
             komada: data.komada

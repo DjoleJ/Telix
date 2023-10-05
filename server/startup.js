@@ -15,5 +15,20 @@ Meteor.startup(() => {
     //     console.log('-----------------');
     // })
 
+    // const arts = ArticlesTwo.find().fetch();
+
+    // arts.forEach(ar => {
+    //     const sifra = ar.sifra;
+    //     const sifraFloat = parseFloat(sifra);
+    //     console.log(sifra);
+    //     console.log(sifraFloat);
+
+    //     ArticlesTwo.update({ _id: ar._id }, {
+    //         $set: { sifraNum: sifraFloat }
+    //     })
+
+    //     console.log('-----------------------');
+    // })
+
     SyncedCron.start();
 });

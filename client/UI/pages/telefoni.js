@@ -99,28 +99,73 @@ Template.telefoni.helpers({
             const rata2 = phone.tipProdaje.rata2;
             const rata3 = phone.tipProdaje.rata3;
 
-            if(!rata1.placeno || !rata2.placeno) {
-                console.log('drugi if');
+            if(!rata1.placeno) {
                 return true;
-            } else {
-                console.log('drugi else');
-                if(rata3.rata3 != '/') {
-                    console.log('treci if');
-                    if(!rata3.placeno) {
-                        console.log('cetrvti if');
-                        return true;
-                    } else {
-                        console.log('cetrvti else');
-                        return false;
-                    }
-                } else {
-                    console.log('treci else');
-                    return false;
+            }
+
+            if(rata2.rata2 != '/') {
+                if(!rata2.placeno) {
+                    return true;
                 }
             }
+
+            if(rata3.rata3 != '/') {
+                if(!rata2.placeno) {
+                    return true;
+                }
+            }
+
+            return false;
+
+            // if(!rata1.placeno || !rata2.placeno) {
+            //     console.log('drugi if');
+            //     return true;
+            // } else {
+            //     console.log('drugi else');
+            //     if(rata3.rata3 != '/') {
+            //         console.log('treci if');
+            //         if(!rata3.placeno) {
+            //             console.log('cetrvti if');
+            //             return true;
+            //         } else {
+            //             console.log('cetrvti else');
+            //             return false;
+            //         }
+            //     } else {
+            //         console.log('treci else');
+            //         return false;
+            //     }
+            // }
         } else {
             console.log('prvi else');
             return false;
+        }
+    },
+    getOppositeTipProdaje: (tip) => {
+        if(tip === 'gotovina') {
+            return 'naRate'
+        } else {
+            return 'gotovina'
+        }
+    },
+    getTipProdajeForShow: (tip) => {
+        if(tip === 'gotovina') {
+            return 'Gotovina'
+        } else {
+            return 'Na Rate'
+        }
+    },
+    getDateForInput: (ts) => {
+        if(ts === '/') {
+            return '/';
+        } else {
+            const d = new Date(ts);
+
+        const year = d.getFullYear();
+        const month = d.getMonth() + 1;
+        const day = d.getDate();
+
+        return `${year}-${month}-${day}`;
         }
     }
 })
@@ -469,6 +514,10 @@ Template.telefoni.events({
     'click #btnEditProdato'(event) {
         const id = Session.get('viewDocId');
 
+        const oldPhone = Phones.find({ _id: id }).fetch()[0];
+
+        console.log(oldPhone);
+
         const oldImageEdit = Phones.find({ _id: id }).fetch()[0].image;
 
         const ime = $('#imeIPrezimeEditProdato').val();
@@ -485,24 +534,80 @@ Template.telefoni.events({
         const kontaktProdavac = $('#kontaktTelefonKupacEditProdato').val();
         const prodajnaCena = $(`#prodajnaCenaEditProdato`).val() === '' ? 0 : parseFloat($(`#prodajnaCenaEditProdato`).val());
 
-        const data = {
-            prodavac: {
-                imeIPrezime: ime,
-                kontaktTelefon: kontakt,
-                jmbg
-            },
-            modelUredjaja: model,
-            imeiBroj: imei,
-            oprema,
-            otkupnaCena: cena,
-            preporucenaCena,
-            image,
-            kupac: {
-                imeIPrezime: imeProdavac,
-                kontaktTelefon: kontaktProdavac,
-                jmbg: jmbgProdavac
-            },
-            prodajnaCena
+        const tipProdaje = $('#tipProdajeEdit').val();
+
+        let data = {};
+
+        if(tipProdaje === 'naRate') {
+            const rata1 = $('#rata1Edit').val() === '' ? 0 : parseFloat($('#rata1Edit').val());
+            const rata1Datum = new Date($('#rata1DatumEdit').val()).getTime(); 
+            const rata2 = $('#rata2Edit').val();
+            const rata2Datum = $('#rata2DatumEdit').val(); 
+            const rata3 = $('#rata3Edit').val();
+            const rata3Datum = $('#rata3DatumEdit').val(); 
+
+            const rata2Final = rata2 == '' || rata2 == '/' ? '/' : parseFloat(rata2);
+            const rata2DatumFinal = rata2Datum == '' || rata2Datum == '/' ? '/' : new Date(rata2Datum).getTime(); 
+            const rata3Final = rata3 == '' || rata3 == '/'  ? '/' : parseFloat(rata3);
+            const rata3DatumFinal = rata3Datum == '' || rata3Datum == '/' ? '/' : new Date(rata3Datum).getTime(); 
+
+            data = {
+                prodavac: {
+                    imeIPrezime: ime,
+                    kontaktTelefon: kontakt,
+                    jmbg
+                },
+                modelUredjaja: model,
+                imeiBroj: imei,
+                oprema,
+                otkupnaCena: cena,
+                preporucenaCena,
+                image,
+                kupac: {
+                    imeIPrezime: imeProdavac,
+                    kontaktTelefon: kontaktProdavac,
+                    jmbg: jmbgProdavac
+                },
+                prodajnaCena,
+                tipProdaje: {
+                    tip: tipProdaje,
+                    rata1: {
+                        rata1: rata1,
+                        rata1Datum: rata1Datum,
+                        placeno: oldPhone.tipProdaje.rata1.placeno,
+                    },
+                    rata2: {
+                        rata2: rata2Final,
+                        rata2Datum: rata2DatumFinal,
+                        placeno: oldPhone.tipProdaje.rata2.placeno,
+                    },
+                    rata3: {
+                        rata3: rata3Final,
+                        rata3Datum: rata3DatumFinal,
+                        placeno: oldPhone.tipProdaje.rata3.placeno,
+                    },
+                }
+            }
+        } else {
+            data = {
+                prodavac: {
+                    imeIPrezime: ime,
+                    kontaktTelefon: kontakt,
+                    jmbg
+                },
+                modelUredjaja: model,
+                imeiBroj: imei,
+                oprema,
+                otkupnaCena: cena,
+                preporucenaCena,
+                image,
+                kupac: {
+                    imeIPrezime: imeProdavac,
+                    kontaktTelefon: kontaktProdavac,
+                    jmbg: jmbgProdavac
+                },
+                prodajnaCena
+            }
         }
 
         console.log(id);

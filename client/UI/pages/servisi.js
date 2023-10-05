@@ -324,3 +324,83 @@ Template.servisi.events({
         })
     }
 })
+
+
+
+$(document).keypress(function(e) {
+    if ($("#modalAdd").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnSave').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalFilter").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnSaveFilter').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalSwitch").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnSwitch').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalRemove").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnRemove').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalUpdate").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnSaveUpdate').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalView").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnSaveView').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalEdit").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnEdit').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalEditNaplaceno").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnEditNaplaceno').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalPdf").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnPrint').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalEditProdato").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnEditProdato').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalMinus").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnMinus').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalPlus").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnPlus').click();
+    }
+});
+
+$(document).keypress(function(e) {
+    if ($("#modalEditProdaje").hasClass('show') && (e.keycode == 13 || e.which == 13)) {
+        $('#btnEditProdaje').click();
+    }
+});

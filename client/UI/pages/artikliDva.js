@@ -18,7 +18,7 @@ Template.artikliDva.onRendered(function() {
 
 Template.artikliDva.helpers({
     getArticles: () => {
-        return ArticlesTwo.find({}, { sort: { sifra: -1 } });
+        return ArticlesTwo.find({}, { sort: { sifraNum: 1 } });
     },
     getArticleSales: () => {
         return ArticleSalesTwo.find();

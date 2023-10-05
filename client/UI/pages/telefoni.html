@@ -59,7 +59,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnSave" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnSaveFilter" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnSaveFilter" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnSwitch" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnSwitch" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnRemove" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnRemove" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnSaveUpdate" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnSaveUpdate" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -259,7 +259,11 @@
                     <form id="formView">
                         <div class="form-group">
                             <div class="form-view-title">Slika:</div>
-                            <img id="modalImg" src="http://localhost:3000/cfs/files/images/{{image}}">
+                            {{#if image}}
+                            <img id="modalImg" src="https://www.telix.vip/cfs/files/images/{{image}}" data-id="{{image}}">
+                            {{else}}
+                            <img id="modalImg" src="samsung-galaxy.webp">
+                            {{/if}}
                         </div>
                         <div class="form-group">
                             <div class="form-view-title">Datum:</div>
@@ -364,7 +368,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnSave" data-dismiss="modal">Sačuvaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnSaveView" data-dismiss="modal">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -424,7 +428,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnEdit" data-dismiss="modal">Izmeni</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnEdit" data-dismiss="modal">Izmeni</button>
                 </div>
             </div>
         </div>
@@ -496,12 +500,36 @@
                             <label for="prodajnaCenaEditProdato">Prodajna cena</label>
                             <input type="text" class="form-control" id="prodajnaCenaEditProdato" value="{{prodajnaCena}}">
                         </div>
+                        <div class="form-group">
+                            <label for="tipProdajeEdit">Tip prodaje</label>
+                            <select class="form-control" id="tipProdajeEdit">
+                                <option value="{{tipProdaje.tip}}">{{getTipProdajeForShow tipProdaje.tip}}</option>
+                                <option value="{{getOppositeTipProdaje tipProdaje.tip}}">{{getTipProdajeForShow (getOppositeTipProdaje tipProdaje.tip)}}</option>
+                            </select>
+                        </div>
+                        {{#if isEqual tipProdaje.tip 'naRate'}}
+                        <div class="form-group">
+                            <label for="rata1Edit">Rata 1</label>
+                            <input type="text" class="form-control" id="rata1Edit" value="{{tipProdaje.rata1.rata1}}">
+                            <input type="date" class="form-control" id="rata1DatumEdit" value="{{getDateForInput tipProdaje.rata1.rata1Datum}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rata2Edit">Rata 2</label>
+                            <input type="text" class="form-control" id="rata2Edit" value="{{tipProdaje.rata2.rata2}}">
+                            <input type="date" class="form-control" id="rata2DatumEdit" value="{{getDateForInput tipProdaje.rata2.rata2Datum}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rata3Edit">Rata 3</label>
+                            <input type="text" class="form-control" id="rata3Edit" value="{{tipProdaje.rata3.rata3}}">
+                            <input type="date" class="form-control" id="rata3DatumEdit" value="{{getDateForInput tipProdaje.rata3.rata3Datum}}">
+                        </div>
+                        {{/if}}
                     </form>
                     {{/with}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnEditProdato" data-dismiss="modal">Izmeni</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnEditProdato" data-dismiss="modal">Izmeni</button>
                 </div>
             </div>
         </div>
@@ -655,7 +683,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                    <button type="button" class="btn btn-save" id="btnPrint" data-dismiss="modal">Štampaj</button>
+                    <button type="button" class="btn btn-save btn-for-enter" id="btnPrint" data-dismiss="modal">Štampaj</button>
                 </div>
             </div>
         </div>

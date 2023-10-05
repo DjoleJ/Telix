@@ -90,11 +90,11 @@ Template.izvestaji.helpers({
         let phones;
 
         if(from && to) {
-            phones = Phones.find({ status: 'prodato', datum: { $gte: from, $lte: to } }).fetch();
+            phones = Phones.find({ status: 'prodato', datumProdaje: { $gte: from, $lte: to } }).fetch();
         } else if(from) {
-            phones = Phones.find({ status: 'prodato', datum: { $gte: from } }).fetch();
+            phones = Phones.find({ status: 'prodato', datumProdaje: { $gte: from } }).fetch();
         } else if(to) {
-            phones = Phones.find({ status: 'prodato', datum: { $lte: to } }).fetch();
+            phones = Phones.find({ status: 'prodato', datumProdaje: { $lte: to } }).fetch();
         } else {
             phones = Phones.find({ status: 'prodato' }).fetch();
         }

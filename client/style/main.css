@@ -84,7 +84,7 @@ a, a:hover, a:focus {
         padding: 10px;
         padding-bottom: 0;
         padding-top: 0;
-        border-right: 1px solid #3455c2;
+        border-right: 1px solid #c9c9c9;
         position: fixed;
 }
 
@@ -94,7 +94,7 @@ a, a:hover, a:focus {
 
 #sidebar .hamburger {
         width: 100%;
-        color: #3455c2;       
+        color: #c9c9c9;       
         display: flex;
         justify-content: flex-end;
         margin-top: 10px;
@@ -131,7 +131,7 @@ a, a:hover, a:focus {
 
 #sidebar .menu {
         width: 90%;
-        color: #3455c2; 
+        color: #c9c9c9; 
         margin: 0 auto;
 }
 
@@ -157,13 +157,13 @@ a, a:hover, a:focus {
         padding: 5px;
         text-transform: uppercase;
         transition: all 0.3s;
-        background-image: linear-gradient(120deg, transparent 0%, transparent 50%, #3455c2 50% );
+        background-image: linear-gradient(120deg, transparent 0%, transparent 50%, #c9c9c9 50% );
         background-size: 230%;
         transition: all .4s;
 }
 
 #sidebar .menu .menu-item p.active {
-        background-color: #3455c2; 
+        background-color: #c9c9c9; 
         color: #212121; 
 }
 
@@ -209,7 +209,7 @@ a, a:hover, a:focus {
 }
 
 .role-box-singups-number.color-red {
-        color: #3455c2; 
+        color: #c9c9c9; 
 }
 
 .role-box-singups-number.color-green {
@@ -233,7 +233,7 @@ a, a:hover, a:focus {
 }
 
 .raid-composition-picked-number.color-red {
-        color: #3455c2; 
+        color: #c9c9c9; 
 }
 
 .raid-composition-picked-number.color-green {
@@ -542,7 +542,7 @@ a, a:hover, a:focus {
 /* TELIX */
 
 .btn-save {
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #fff
 }
 
@@ -552,7 +552,7 @@ a, a:hover, a:focus {
 
 .table-box {
     padding: 10px;
-    /* border: 1px solid #3455c2; */
+    /* border: 1px solid #c9c9c9; */
     border-radius: 5px;
 }
 
@@ -570,9 +570,9 @@ a, a:hover, a:focus {
     /* width: auto; */
     padding: 10px;
     height: auto;
-    border: 2px solid #3455c2;
+    border: 2px solid #c9c9c9;
     border-radius: 10px;
-    color: #3455c2;
+    color: #c9c9c9;
     display: flex;
     /* flex-direction: column; */
     align-items: center;
@@ -590,7 +590,7 @@ a, a:hover, a:focus {
     padding: 10px;
     height: auto;
     border-radius: 10px;
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #212121;
     display: flex;
     align-items: center;
@@ -606,7 +606,7 @@ a, a:hover, a:focus {
     margin-top: 30px;
     width: 100%;
     padding: 30px 15px;
-    /* border: 1px solid #3455c2;
+    /* border: 1px solid #c9c9c9;
     border-radius: 10px; */
 }
 
@@ -616,7 +616,7 @@ a, a:hover, a:focus {
     flex-direction: column;
     /* justify-content: space-around; */
     /* align-items: center; */
-    color: #3455c2;
+    color: #c9c9c9;
 }
 
 .table-main-head-row {
@@ -625,7 +625,7 @@ a, a:hover, a:focus {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 2px solid #3455c2;
+    border-bottom: 2px solid #c9c9c9;
 }
 
 .table-main-head-row-item {
@@ -671,7 +671,7 @@ a, a:hover, a:focus {
     flex-direction: column;
     /* justify-content: space-around; */
     /* align-items: center; */
-    color: #3455c2;
+    color: #c9c9c9;
 }
 
 .table-main-body-row {
@@ -680,7 +680,7 @@ a, a:hover, a:focus {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 1px solid #3455c2;
+    border-bottom: 1px solid #c9c9c9;
     background-color: #212121;
     position: relative;
 }
@@ -780,9 +780,9 @@ a, a:hover, a:focus {
     flex-direction: column;
     /* justify-content: space-around; */
     align-items: flex-start;
-    /* border-bottom: 2px solid #3455c2; */
+    /* border-bottom: 2px solid #c9c9c9; */
     background-color: #212121;
-    border: 1px solid #3455c2;
+    border: 1px solid #c9c9c9;
     border-top: 0;
     padding: 5px;
 }
@@ -792,7 +792,7 @@ a, a:hover, a:focus {
     padding: 5px;
     height: auto;
     border-radius: 5px;
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #212121;
     display: flex;
     align-items: center;
@@ -807,7 +807,7 @@ a, a:hover, a:focus {
     padding: 10px;
     height: auto;
     border-radius: 10px;
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #fff;
     display: flex;
     align-items: center;
@@ -830,7 +830,7 @@ a, a:hover, a:focus {
     padding: 5px;
     height: auto;
     border-radius: 5px;
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #212121;
     display: flex;
     align-items: center;
@@ -846,7 +846,7 @@ a, a:hover, a:focus {
     padding: 5px;
     height: auto;
     border-radius: 5px;
-    background-color: #3455c2;
+    background-color: #c9c9c9;
     color: #212121;
     display: flex;
     align-items: center;
@@ -873,7 +873,7 @@ a, a:hover, a:focus {
 }
 
 .table-title {
-    color: #3455c2;
+    color: #c9c9c9;
     font-size: 30px;
     padding-left: 15px;
     cursor: pointer;
@@ -1033,7 +1033,7 @@ a, a:hover, a:focus {
     position: relative;
     height: 40px;
     background-color: #fff;
-    border: 1px solid #3455c2;
+    border: 1px solid #c9c9c9;
     border-radius: 10px;
     padding: 5px 10px;
 }
@@ -1060,7 +1060,7 @@ a, a:hover, a:focus {
     display: flex;
     width: 100%;
     flex-direction: row;
-    color: #3455c2;
+    color: #c9c9c9;
     justify-content: center;
     align-items: center;
     margin-top: 50px;
@@ -1070,7 +1070,7 @@ a, a:hover, a:focus {
     display: flex;
     width: 100%;
     flex-direction: row;
-    color: #3455c2;
+    color: #c9c9c9;
     justify-content: center;
     align-items: center;
     margin-top: 100px;
@@ -1080,7 +1080,7 @@ a, a:hover, a:focus {
     display: flex;
     width: 20%;
     flex-direction: column;
-    color: #3455c2;
+    color: #c9c9c9;
     justify-content: center;
     align-items: center;
     font-size: 18px;
@@ -1095,7 +1095,7 @@ a, a:hover, a:focus {
     display: flex;
     width: 100%;
     flex-direction: row;
-    color: #3455c2;
+    color: #c9c9c9;
     justify-content: center;
     align-items: center;
     margin-top: 100px;
@@ -1105,7 +1105,7 @@ a, a:hover, a:focus {
     display: flex;
     width: 100%;
     flex-direction: column;
-    color: #3455c2;
+    color: #c9c9c9;
     justify-content: center;
     align-items: center;
     font-size: 18px;
@@ -1121,14 +1121,14 @@ a, a:hover, a:focus {
 } 
 
 #izvestajiFrom {
-    border: 2px solid #3455c2; 
-    color: #3455c2;
+    border: 2px solid #c9c9c9; 
+    color: #c9c9c9;
     margin-right: 10px;
 }
 
 #izvestajiTo {
-    border: 2px solid #3455c2; 
-    color: #3455c2;
+    border: 2px solid #c9c9c9; 
+    color: #c9c9c9;
     margin-left: 10px;
 }
 
@@ -1156,7 +1156,7 @@ a, a:hover, a:focus {
 #loginBox {
     width: 700px;
     height: auto;
-    border: 2px solid #3455c2; 
+    border: 2px solid #c9c9c9; 
     padding: 10px 20px;
 }
 
@@ -1166,18 +1166,18 @@ a, a:hover, a:focus {
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    color: #3455c2; 
+    color: #c9c9c9; 
     font-weight: bold;
     margin-top: 10px;
     margin-bottom: 20px;
 }
 
 #loginForm .form-group label {
-    color: #3455c2; 
+    color: #c9c9c9; 
 }
 
 #loginForm .form-group input {
-    border: 1px solid #3455c2; 
+    border: 1px solid #c9c9c9; 
     background-color: #fff;
 }
 
@@ -1188,8 +1188,8 @@ a, a:hover, a:focus {
 }
 
 #btnLogin {
-    border: 1px solid #3455c2; 
-    color: #3455c2; 
+    border: 1px solid #c9c9c9; 
+    color: #c9c9c9; 
     width: 120px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -1214,13 +1214,13 @@ a, a:hover, a:focus {
 
 #accountUsername {
     font-size: 20px;
-    color: #3455c2; 
+    color: #c9c9c9; 
     text-transform: capitalize;
 }
 
 #btnLogout {
-    border: 1px solid #3455c2; 
-    color: #3455c2; 
+    border: 1px solid #c9c9c9; 
+    color: #c9c9c9; 
     width: 120px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -1533,7 +1533,7 @@ a, a:hover, a:focus {
 
 /*
 
-#3455c2; 
+#c9c9c9; 
 #212121;
 
 */
